@@ -1,12 +1,15 @@
 //initialize function called when the script loads
 function initialize(){
 	cities();
+	addColumns();
+	addEvents();
+	debugAjax();
 };
-
+var cityPop;
 //function to create a table with cities and their populations
 function cities(){
 	//define two arrays for cities and population
-	var cityPop = [
+	cityPop = [
 		{
 			city: 'Madison',
 			population: 233209
@@ -41,12 +44,10 @@ function cities(){
         $("table").append(rowHtml);
     };
 
-    //call helper functions to fill web page
-    addColumns(cityPop);
-    addEvents();
+
 };
 //function to populate columns in the table
-function addColumns(cityPop){
+function addColumns(){
 
     //iterate through table rows
     $('tr').each(function(i){
@@ -114,28 +115,27 @@ function addEvents(){
   //attributes the click function to the table
 	$('table').on('click', clickme);
 };
+//******************************
+//**********ACTIVITY 4**********
+//******************************
+//this function is a callback which prints
+//the megacity data onto the screen
+function debugCallback(mydata){
 
-//call the initialize function when the document has loaded
-$(document).ready(initialize);
+	//append mydiv with a string representation
+	//of the megacity data
+	$(mydiv).append('<br>GeoJSON data:<br>' + JSON.stringify(mydata));
 
-function debugCallback(response){
-
-	$(mydiv).append('GeoJSON data: ' + JSON.stringify(mydata));
 };
 
+//function that instantiates megacity data
+//and sets a callback response
 function debugAjax(){
 
-	var mydata;
-
-	$.ajax("data/MegaCities.geojson", {
+	$.ajax("data/map.geojson", {
 		dataType: "json",
-		success: function(response){
-
-			debugCallback(mydata);
-		}
+		success: debugCallback
 	});
-
-	$(mydiv).append('<br>GeoJSON data:<br>' + JSON.stringify(mydata));
 };
-
-$(mydiv).append('GeoJSON data: ' + JSON.stringify(mydata));
+//call the initialize function when the document has loaded
+$(document).ready(initialize);
